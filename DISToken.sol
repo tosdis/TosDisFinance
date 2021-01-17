@@ -20,7 +20,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
  * roles, as well as the default admin role, which will let it grant both minter
  * and pauser roles to other accounts.
  */
-contract FeeToken is Context, AccessControl, ERC20Burnable {
+contract DISToken is Context, AccessControl, ERC20Burnable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     /**
