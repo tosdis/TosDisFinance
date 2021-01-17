@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.6.11;
+pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/GSN/Context.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 
 /**
@@ -13,8 +15,9 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
  * typical vesting scheme, with a cliff and vesting period. Optionally revocable by the
  * owner.
  */
-contract TokenVesting is Context {
+contract TokenVesting is Context, ReentrancyGuard  {
     using SafeMath for uint256;
+    using SafeERC20 for IERC20;
 
     event Released(uint256 amount);
 
@@ -41,19 +44,18 @@ contract TokenVesting is Context {
     }
 
     function createVesting(
-        address sender,
         address beneficiary,
         uint256 start,
         uint256 interval,
         uint256 duration,
         uint256 amount
-    ) public {
+    ) external nonReentrant {
         require(duration >= interval, "TokenVesting #createVesting: interval cannot be bigger than duration");
 
         Vesting storage vest = _vestings[beneficiary];
         require(vest.balance == 0, "TokenVesting #createVesting: vesting for beneficiary already created");
 
-        _token.transferFrom(sender, address(this), amount);
+        _token.safeTransferFrom(_msgSender(), address(this), amount);
 
         vest.start = start;
         vest.interval = interval;
@@ -69,7 +71,7 @@ contract TokenVesting is Context {
         vest.start = start;
     }
 
-    function release(address beneficiary) public {
+    function release(address beneficiary) external nonReentrant {
         uint256 unreleased = releasableAmount(beneficiary);
         require(unreleased > 0, "TokenVesting #release: nothing to release");
 
@@ -78,7 +80,7 @@ contract TokenVesting is Context {
         vest.released = vest.released.add(unreleased);
         vest.balance = vest.balance.sub(unreleased);
 
-        _token.transfer(beneficiary, unreleased);
+        _token.safeTransfer(beneficiary, unreleased);
         emit Released(unreleased);
     }
 
