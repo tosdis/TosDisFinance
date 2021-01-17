@@ -65,7 +65,7 @@ contract ITOPool is Ownable, ReentrancyGuard {
         maxDistributedTokenAmount = _maxDistributedTokenAmount;
     }
 
-    function pay() payable external{
+    function pay() payable external nonReentrant{
         require(msg.value >= minEthPayment, "Less then min amount");
         require(msg.value <= maxEthPayment, "More then max amount");
         require(now >= startTimestamp, "Not started");
@@ -117,7 +117,7 @@ contract ITOPool is Ownable, ReentrancyGuard {
     /// @param _receiver Token receiver.
     function proccessClaim(
         address _receiver
-    ) internal {
+    ) internal nonReentrant{
         require(now > startClaimTimestamp, "Distribution not started");
         uint256 _amount = tokenDebt[_receiver];
         if (_amount > 0) {
