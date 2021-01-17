@@ -50,6 +50,7 @@ contract TokenVesting is Context, ReentrancyGuard  {
         uint256 duration,
         uint256 amount
     ) external nonReentrant {
+        require(interval > 0 , "TokenVesting #createVesting: interval must be greater than 0");
         require(duration >= interval, "TokenVesting #createVesting: interval cannot be bigger than duration");
 
         Vesting storage vest = _vestings[beneficiary];
