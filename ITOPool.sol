@@ -65,21 +65,15 @@ contract ITOPool is Ownable, ReentrancyGuard {
         maxDistributedTokenAmount = _maxDistributedTokenAmount;
     }
 
-    function pay() payable external nonReentrant{
+    function pay() payable external {
         require(msg.value >= minEthPayment, "Less then min amount");
         require(msg.value <= maxEthPayment, "More then max amount");
         require(now >= startTimestamp, "Not started");
         require(now < finishTimestamp, "Ended");
-        require(tokensForDistribution < maxDistributedTokenAmount, "Filled");
-
+        
         uint256 tokenAmount = getTokenAmount(msg.value);
-        //Need to sell the rest and return rest ETH
-        if(tokensForDistribution.add(tokenAmount) > maxDistributedTokenAmount)
-        {
-            tokenAmount = maxDistributedTokenAmount.sub(tokensForDistribution);
-            uint256 resturnETH = msg.value.sub(getETHAmount(tokenAmount));
-            msg.sender.transfer(resturnETH);
-        }
+        require(tokensForDistribution.add(tokenAmount) <= maxDistributedTokenAmount, "Overfilled");
+        
         tokensForDistribution = tokensForDistribution.add(tokenAmount);
         tokenDebt[msg.sender] = tokenDebt[msg.sender].add(tokenAmount);
 
@@ -94,13 +88,6 @@ contract ITOPool is Ownable, ReentrancyGuard {
         return ethAmount.div(tokenPrice).mul(10**decimals);
     }
 
-    function getETHAmount(uint256 tokenAmount)
-        internal
-        view
-        returns (uint256)
-    {
-        return tokenAmount.mul(tokenPrice).div(10**decimals);
-    }
 
     /// @dev Allows to claim tokens for the specific user.
     /// @param _user Token receiver.
@@ -121,19 +108,18 @@ contract ITOPool is Ownable, ReentrancyGuard {
         require(now > startClaimTimestamp, "Distribution not started");
         uint256 _amount = tokenDebt[_receiver];
         if (_amount > 0) {
-            rewardToken.safeTransfer(_receiver, _amount);
-            tokenDebt[_receiver] = 0;
-
+            tokenDebt[_receiver] = 0;            
             distributedTokens = distributedTokens.add(_amount);
             payedAmount[_receiver] = payedAmount[_receiver].add(_amount);
+            rewardToken.safeTransfer(_receiver, _amount);
             emit TokensWithdrawn(_receiver,_amount);
         }
     }
 
-    
-    function withdrawETH() external onlyOwner returns(bool success) {
-        msg.sender.transfer(address(this).balance);
-        return true;
+    function withdrawETH(uint256 amount) external onlyOwner{
+        // This forwards all available gas. Be sure to check the return value!
+        (bool success, ) = msg.sender.call.value(amount)("");
+        require(success, "Transfer failed.");
     }
 
      function withdrawNotSoldTokens() external onlyOwner returns(bool success) {
