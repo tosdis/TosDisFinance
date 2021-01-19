@@ -25,8 +25,6 @@ contract ITOPool is Ownable, ReentrancyGuard {
     mapping(address => uint256) public tokenDebt;
     mapping(address => uint256) public payedAmount;
 
-    event UpdatedSettings(string name, uint256 _newFinishTimestamp);
-    
     event TokensDebt(
         address holder,
         uint256 ethAmount,
@@ -127,27 +125,5 @@ contract ITOPool is Ownable, ReentrancyGuard {
         uint256 balance = rewardToken.balanceOf(address(this));
         rewardToken.safeTransfer(msg.sender, balance.add(distributedTokens).sub(tokensForDistribution));
         return true;
-    }
-
-    function setFinishTimestamp(uint256 _newFinishTimestamp) external onlyOwner {
-        require(
-                startTimestamp < _newFinishTimestamp,
-                "Start timestamp must be less than finish timestamp"
-            );
-        require(
-                _newFinishTimestamp > now,
-                "Finish timestamp must be more than current block"
-            );
-        finishTimestamp = _newFinishTimestamp;
-        emit UpdatedSettings("finishTimestamp", finishTimestamp);
-    }
-
-    function setMaxDistributedTokenAmount(uint256 _newMaxDistributedTokenAmount) external onlyOwner {
-        require(
-            _newMaxDistributedTokenAmount > maxDistributedTokenAmount,
-            "New MaxDistributedTokenAmount must be more then current"
-        );
-        maxDistributedTokenAmount = _newMaxDistributedTokenAmount;
-        emit UpdatedSettings("maxDistributedTokenAmount", maxDistributedTokenAmount);
     }
 }
