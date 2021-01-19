@@ -142,11 +142,6 @@ contract ITOPool is Ownable, ReentrancyGuard {
         emit UpdatedSettings("finishTimestamp", finishTimestamp);
     }
 
-    function setStartClaimTimestamp(uint256 _newStartClaimTimestamp) external onlyOwner {
-        startClaimTimestamp = _newStartClaimTimestamp;
-        emit UpdatedSettings("startClaimTimestamp", startClaimTimestamp);
-    }
-
     function setMaxDistributedTokenAmount(uint256 _newMaxDistributedTokenAmount) external onlyOwner {
         require(
             _newMaxDistributedTokenAmount > maxDistributedTokenAmount,
