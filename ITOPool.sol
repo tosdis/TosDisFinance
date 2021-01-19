@@ -26,12 +26,12 @@ contract ITOPool is Ownable, ReentrancyGuard {
     mapping(address => uint256) public payedAmount;
 
     event TokensDebt(
-        address holder,
+        address indexed holder,
         uint256 ethAmount,
         uint256 tokenAmount
     );
     
-    event TokensWithdrawn(address holder, uint256 amount);
+    event TokensWithdrawn(address indexed holder, uint256 amount);
 
     constructor(
         uint256 _tokenPrice,
