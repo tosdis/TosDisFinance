@@ -22,8 +22,13 @@ contract ITOPool is Ownable, ReentrancyGuard {
     uint256 public tokensForDistribution;
     uint256 public distributedTokens;
 
-    mapping(address => uint256) public tokenDebt;
-    mapping(address => uint256) public payedAmount;
+    struct UserInfo {
+        uint debt;
+        uint total;
+        uint totalInvestedETH;
+    }
+
+    mapping(address => UserInfo) public userInfo;
 
     event TokensDebt(
         address indexed holder,
@@ -71,10 +76,15 @@ contract ITOPool is Ownable, ReentrancyGuard {
         
         uint256 tokenAmount = getTokenAmount(msg.value);
         require(tokensForDistribution.add(tokenAmount) <= maxDistributedTokenAmount, "Overfilled");
-        
-        tokensForDistribution = tokensForDistribution.add(tokenAmount);
-        tokenDebt[msg.sender] = tokenDebt[msg.sender].add(tokenAmount);
 
+        UserInfo storage user = userInfo[msg.sender];
+        require(user.totalInvestedETH.add(msg.value) <= maxEthPayment, "More then max amount");
+
+        tokensForDistribution = tokensForDistribution.add(tokenAmount);
+        user.totalInvestedETH = user.totalInvestedETH.add(msg.value);
+        user.total = user.total.add(tokenAmount);
+        user.debt = user.debt.add(tokenAmount);
+        
         emit TokensDebt(msg.sender, msg.value, tokenAmount);
     }
 
@@ -104,11 +114,11 @@ contract ITOPool is Ownable, ReentrancyGuard {
         address _receiver
     ) internal nonReentrant{
         require(now > startClaimTimestamp, "Distribution not started");
-        uint256 _amount = tokenDebt[_receiver];
+        UserInfo storage user = userInfo[_receiver];
+        uint256 _amount = user.debt;
         if (_amount > 0) {
-            tokenDebt[_receiver] = 0;            
+            user.debt = 0;            
             distributedTokens = distributedTokens.add(_amount);
-            payedAmount[_receiver] = payedAmount[_receiver].add(_amount);
             rewardToken.safeTransfer(_receiver, _amount);
             emit TokensWithdrawn(_receiver,_amount);
         }
