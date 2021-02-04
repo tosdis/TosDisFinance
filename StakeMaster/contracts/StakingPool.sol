@@ -15,32 +15,39 @@ contract StakingPool is Ownable, ReentrancyGuard {
     uint256 public startBlock;
     uint256 public lastRewardBlock;
     uint256 public finishBlock;
-    uint256 public totalShares;
+    uint256 public allStakedAmount;
+    uint256 public allPaidReward;
+    uint256 public allRewardDebt;
+    uint256 public poolTokenAmount;
     uint256 public rewardPerBlock;
     uint256 public accTokensPerShare; // Accumulated tokens per share
+    uint256 public participants; //Count of participants
 
-    mapping(address => uint256) public stakes;
-    mapping(address => uint256) public rewardDebts;
+    // Info of each user.
+    struct UserInfo {
+        uint256 amount;     // How many tokens the user has staked.
+        uint256 rewardDebt; // Reward debt
+    }
 
-    event FinishBlockUpdated(uint256 _newFinishBlock);
+    mapping (address => UserInfo) public userInfo;
+
+    event FinishBlockUpdated(uint256 newFinishBlock);
     event PoolReplenished(uint256 amount);
-    event TokensStaked(
-        address stakeholder,
-        uint256 amount,
-        uint256 sharesAchived
-    );
-    event StakeWithdrawn(address stakeholder, uint256 amount, uint256 reward);
+    event TokensStaked(address indexed user, uint256 amount, uint256 reward);
+    event StakeWithdrawn(address indexed user, uint256 amount, uint256 reward);
     event EmergencyWithdraw(address indexed user, uint256 amount);
 
+    event WithdrawPoolRemainder(address indexed user, uint256 amount);
+
     constructor(
-        address _stakingToken,
-        address _poolToken,
+        IERC20 _stakingToken,
+        IERC20 _poolToken,
         uint256 _startBlock,
         uint256 _finishBlock,
         uint256 _poolTokenAmount
     ) public {
-        stakingToken = IERC20(_stakingToken);
-        rewardToken = IERC20(_poolToken);
+        stakingToken = _stakingToken;
+        rewardToken = _poolToken;
         require(
             _startBlock < _finishBlock,
             "start block must be less than finish block"
@@ -52,6 +59,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
         startBlock = _startBlock;
         lastRewardBlock = startBlock;
         finishBlock = _finishBlock;
+        poolTokenAmount = _poolTokenAmount;
         rewardPerBlock = _poolTokenAmount.div(_finishBlock.sub(_startBlock));
     }
 
@@ -71,19 +79,16 @@ contract StakingPool is Ownable, ReentrancyGuard {
 
     // View function to see pending Reward on frontend.
     function pendingReward(address _user) external view returns (uint256) {
-        uint256 lpSupply = stakingToken.balanceOf(address(this));
+        UserInfo storage user = userInfo[_user];
         uint256 tempAccTokensPerShare = accTokensPerShare;
-        if (block.number > lastRewardBlock && lpSupply != 0) {
+        if (block.number > lastRewardBlock && allStakedAmount != 0) {
             uint256 multiplier = getMultiplier(lastRewardBlock, block.number);
             uint256 reward = multiplier.mul(rewardPerBlock);
             tempAccTokensPerShare = accTokensPerShare.add(
-                reward.mul(1e12).div(lpSupply)
+                reward.mul(1e18).div(allStakedAmount)
             );
         }
-        return
-            stakes[_user].mul(tempAccTokensPerShare).div(1e12).sub(
-                rewardDebts[_user]
-            );
+        return user.amount.mul(tempAccTokensPerShare).div(1e18).sub(user.rewardDebt);
     }
 
     // Update reward variables of the given pool to be up-to-date.
@@ -91,8 +96,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
         if (block.number <= lastRewardBlock) {
             return;
         }
-        uint256 stakingSupply = stakingToken.balanceOf(address(this));
-        if (stakingSupply == 0) {
+        if (allStakedAmount == 0) {
             lastRewardBlock = block.number;
             return;
         }
@@ -100,103 +104,90 @@ contract StakingPool is Ownable, ReentrancyGuard {
         uint256 multiplier = getMultiplier(lastRewardBlock, block.number);
         uint256 reward = multiplier.mul(rewardPerBlock);
         accTokensPerShare = accTokensPerShare.add(
-            reward.mul(1e12).div(stakingSupply)
+            reward.mul(1e18).div(allStakedAmount)
         );
         lastRewardBlock = block.number;
     }
 
-    function stakeTokens(uint256 _amountToStake) public {
+    function stakeTokens(uint256 _amountToStake) external nonReentrant{
         updatePool();
         uint256 pending = 0;
-        if (stakes[msg.sender] > 0) {
-            pending = calculatePending();
+        UserInfo storage user = userInfo[msg.sender];
+        if (user.amount > 0) {
+            pending = transferPendingReward(user);
+        }
+        else{
+            participants +=1;
         }
 
         if (_amountToStake > 0) {
-            stakingToken.safeTransferFrom(
-                address(msg.sender),
-                address(this),
-                _amountToStake
-            );
-            stakes[msg.sender] = stakes[msg.sender].add(_amountToStake);
+            stakingToken.safeTransferFrom(msg.sender, address(this), _amountToStake);
+            user.amount = user.amount.add(_amountToStake);
+            allStakedAmount = allStakedAmount.add(_amountToStake);
         }
 
-        rewardDebts[msg.sender] = stakes[msg.sender].mul(accTokensPerShare).div(
-            1e12
-        );
-
+        allRewardDebt = allRewardDebt.sub(user.rewardDebt);
+        user.rewardDebt = user.amount.mul(accTokensPerShare).div(1e18);
+        allRewardDebt = allRewardDebt.add(user.rewardDebt);
         emit TokensStaked(msg.sender, _amountToStake, pending);
     }
 
     // Leave the pool. Claim back your tokens.
     // Unclocks the staked + gained tokens and burns pool shares
-    function withdrawStake(uint256 _stakeAmount) public nonReentrant {
-        require(stakes[msg.sender] >= _stakeAmount, "withdraw: not good");
+    function withdrawStake(uint256 _amount) external nonReentrant {
+        UserInfo storage user = userInfo[msg.sender];
+        require(user.amount >= _amount, "withdraw: not good");
         updatePool();
-        uint256 pending = calculatePending();
+        uint256 pending = transferPendingReward(user);
 
-        if (_stakeAmount > 0) {
-            stakes[msg.sender] = stakes[msg.sender].sub(_stakeAmount);
-            stakingToken.safeTransfer(address(msg.sender), _stakeAmount);
+        if (_amount > 0) {
+            user.amount = user.amount.sub(_amount);
+            stakingToken.safeTransfer(msg.sender, _amount);
+            if(user.amount == 0){
+                participants -= 1;
+            }
         }
+        allRewardDebt = allRewardDebt.sub(user.rewardDebt);
+        user.rewardDebt = user.amount.mul(accTokensPerShare).div(1e18);
+        allRewardDebt = allRewardDebt.add(user.rewardDebt);
+        allStakedAmount = allStakedAmount.sub(_amount);
 
-        rewardDebts[msg.sender] = stakes[msg.sender].mul(accTokensPerShare).div(
-            1e12
-        );
-
-        emit StakeWithdrawn(msg.sender, _stakeAmount, pending);
+        emit StakeWithdrawn(msg.sender, _amount, pending);
     }
 
-    function calculatePending() private returns (uint256) {
-        uint256 pending =
-            stakes[msg.sender].mul(accTokensPerShare).div(1e12).sub(
-                rewardDebts[msg.sender]
-            );
+    function transferPendingReward(UserInfo memory user) private returns (uint256) {
+        uint256 pending = user.amount.mul(accTokensPerShare).div(1e18).sub(user.rewardDebt);
 
         if (pending > 0) {
-            rewardToken.safeTransfer(address(msg.sender), pending);
+            rewardToken.safeTransfer(msg.sender, pending);
+            allPaidReward = allPaidReward.add(pending);
         }
 
         return pending;
     }
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
-    function emergencyWithdraw() public {
-        stakingToken.safeTransfer(address(msg.sender), stakes[msg.sender]);
-        emit EmergencyWithdraw(msg.sender, stakes[msg.sender]);
+    function emergencyWithdraw() external nonReentrant{
+        UserInfo storage user = userInfo[msg.sender];
+        stakingToken.safeTransfer(msg.sender, user.amount);
+        emit EmergencyWithdraw(msg.sender, user.amount);
 
-        stakes[msg.sender] = 0;
-        rewardDebts[msg.sender] = 0;
+        allStakedAmount = allStakedAmount.sub(user.amount);
+        allRewardDebt = allRewardDebt.sub(user.rewardDebt);
+        user.amount = 0;
+        user.rewardDebt = 0;
+        participants -=1;
     }
 
-    // Withdraw reward. EMERGENCY ONLY.
-    function emergencyRewardWithdraw(uint256 _amount) public onlyOwner {
-        require(
-            _amount <= rewardToken.balanceOf(address(this)),
-            "not enough token"
-        );
-        rewardToken.safeTransfer(address(msg.sender), _amount);
-    }
 
-    function setFinishBlock(uint256 _newFinishBlock) external onlyOwner {
-        require(
-            _newFinishBlock > finishBlock,
-            "New finish block must be more then current"
-        );
-        finishBlock = _newFinishBlock;
-        rewardPerBlock = rewardToken.balanceOf(address(this)).div(
-            finishBlock.sub(lastRewardBlock)
-        );
+    function withdrawPoolRemainder() external onlyOwner nonReentrant{
+        require(block.number > finishBlock, "Allow after finish");
+        updatePool();
+        uint256 pending = allStakedAmount.mul(accTokensPerShare).div(1e18).sub(allRewardDebt);
+        uint256 returnAmount = poolTokenAmount.sub(allPaidReward).sub(pending);
+        allPaidReward = allPaidReward.add(returnAmount);
 
-        emit FinishBlockUpdated(_newFinishBlock);
-    }
-
-    function topUpStakingPool(uint256 _topUpAmount) external onlyOwner {
-        rewardToken.safeTransferFrom(msg.sender, address(this), _topUpAmount);
-        rewardPerBlock = rewardToken.balanceOf(address(this)).div(
-            finishBlock.sub(lastRewardBlock)
-        );
-
-        emit PoolReplenished(_topUpAmount);
+        rewardToken.safeTransfer(msg.sender, returnAmount);
+        emit WithdrawPoolRemainder(msg.sender, returnAmount);
     }
 }
