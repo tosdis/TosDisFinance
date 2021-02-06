@@ -169,14 +169,16 @@ contract StakingPool is Ownable, ReentrancyGuard {
     // Withdraw without caring about rewards. EMERGENCY ONLY.
     function emergencyWithdraw() external nonReentrant{
         UserInfo storage user = userInfo[msg.sender];
-        stakingToken.safeTransfer(msg.sender, user.amount);
-        emit EmergencyWithdraw(msg.sender, user.amount);
+        if(user.amount > 0) {
+            stakingToken.safeTransfer(msg.sender, user.amount);
+            emit EmergencyWithdraw(msg.sender, user.amount);
 
-        allStakedAmount = allStakedAmount.sub(user.amount);
-        allRewardDebt = allRewardDebt.sub(user.rewardDebt);
-        user.amount = 0;
-        user.rewardDebt = 0;
-        participants -=1;
+            allStakedAmount = allStakedAmount.sub(user.amount);
+            allRewardDebt = allRewardDebt.sub(user.rewardDebt);
+            user.amount = 0;
+            user.rewardDebt = 0;
+            participants -= 1;
+        }
     }
 
 
