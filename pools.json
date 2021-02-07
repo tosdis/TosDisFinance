@@ -4,12 +4,8 @@
   ],
   "poolTokenImages": [
     {
-      "address": "0x0394D17AF9dd20A1330754ca88DEdA4AFa687b34",
-      "image_url": "https://etherscan.io/token/images/tether_32.png"
-    },
-    {
-      "address": "0xf836dB93E142452F74b843eE209e0F9C1372c5D2",
-      "image_url": "https://etherscan.io/token/images/uniswap_32.png"
+      "address": "0x220B71671b649c03714dA9c621285943f3cbcDC6",
+      "image_url": "https://app.tosdis.finance/assets/images/favicon.png"
     }
   ]
 }
