@@ -4,12 +4,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
-import "./StakingPool.sol";
+import "./IDOPool.sol";
 
-contract StakeMaster is Ownable {
+contract IDOMaster is Ownable {
     using SafeMath for uint256;
     using SafeERC20 for ERC20Burnable;
-    using SafeERC20 for IERC20;
+    using SafeERC20 for ERC20;
 
     ERC20Burnable public feeToken;
     address public feeWallet;
@@ -17,7 +17,16 @@ contract StakeMaster is Ownable {
     uint256 public burnPercent;
     uint256 public divider;
 
-    event StakingPoolCreated(address owner, address pool, address stakingToken, address poolToken, uint256 startBlock, uint256 finishBlock, uint256 poolTokenAmount);
+    event IDOCreated(address owner, address idoPool,
+        uint256 tokenPrice,
+        address rewardToken,
+        uint256 startTimestamp,
+        uint256 finishTimestamp,
+        uint256 startClaimTimestamp,
+        uint256 minEthPayment,
+        uint256 maxEthPayment,
+        uint256 maxDistributedTokenAmount);
+
     event TokenFeeUpdated(address newFeeToken);
     event FeeAmountUpdated(uint256 newFeeAmount);
     event BurnPercentUpdated(uint256 newBurnPercent, uint256 divider);
@@ -66,15 +75,17 @@ contract StakeMaster is Ownable {
         emit BurnPercentUpdated(_newBurnPercent, _newDivider);
     }
 
-    function createStakingPool(
-        IERC20 _stakingToken,
-        IERC20 _poolToken,
-        uint256 _startBlock,
-        uint256 _finishBlock,
-        uint256 _poolTokenAmount
+    function createIDO(
+        uint256 _tokenPrice,
+        ERC20 _rewardToken,
+        uint256 _startTimestamp,
+        uint256 _finishTimestamp,
+        uint256 _startClaimTimestamp,
+        uint256 _minEthPayment,
+        uint256 _maxEthPayment,
+        uint256 _maxDistributedTokenAmount
     ) external {
-
-        if(feeAmount > 0) {
+        if(feeAmount > 0){
             uint256 burnAmount = feeAmount.mul(burnPercent).div(divider);
 
             feeToken.safeTransferFrom(
@@ -85,24 +96,35 @@ contract StakeMaster is Ownable {
             feeToken.safeTransferFrom(msg.sender, address(this), burnAmount);
             feeToken.burn(burnAmount);
         }
-
-        StakingPool stakingPool =
-            new StakingPool(
-                _stakingToken,
-                _poolToken,
-                _startBlock,
-                _finishBlock,
-                _poolTokenAmount
+        IDOPool idoPool =
+            new IDOPool(
+                _tokenPrice,
+                _rewardToken,
+                _startTimestamp,
+                _finishTimestamp,
+                _startClaimTimestamp,
+                _minEthPayment,
+                _maxEthPayment,
+                _maxDistributedTokenAmount
             );
-        stakingPool.transferOwnership(msg.sender);
+        idoPool.transferOwnership(msg.sender);
 
-        _poolToken.safeTransferFrom(
+        _rewardToken.safeTransferFrom(
             msg.sender,
-            address(stakingPool),
-            _poolTokenAmount
+            address(idoPool),
+            _maxDistributedTokenAmount
         );
 
-        emit StakingPoolCreated(msg.sender, address(stakingPool), address(_stakingToken), address(_poolToken), _startBlock, _finishBlock, _poolTokenAmount);
+        emit IDOCreated(msg.sender, 
+                        address(idoPool),
+                        _tokenPrice,
+                        address(_rewardToken),
+                        _startTimestamp,
+                        _finishTimestamp,
+                        _startClaimTimestamp,
+                        _minEthPayment,
+                        _maxEthPayment,
+                        _maxDistributedTokenAmount);
     }
 
     function isContract(address _addr) private view returns (bool) {
