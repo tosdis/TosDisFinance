@@ -24,7 +24,7 @@ contract FeeToken is Context, AccessControl, ERC20Burnable {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     /**
-     * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE` and `PAUSER_ROLE` to the
+     * @dev Grants `DEFAULT_ADMIN_ROLE`, `MINTER_ROLE` to the
      * account that deploys the contract.
      *
      * See {ERC20-constructor}.
@@ -37,7 +37,7 @@ contract FeeToken is Context, AccessControl, ERC20Burnable {
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
 
         _setupRole(MINTER_ROLE, _msgSender());
-        _mint(msg.sender, totalSupply);
+        _mint(_msgSender(), totalSupply);
     }
 
     /**

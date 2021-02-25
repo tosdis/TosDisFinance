@@ -22,6 +22,13 @@ module.exports = {
       from: "0x56655FdfF46Ac28dB72603c5589A69B45B8604cc",
       skipDryRun: true,
     },
+    testBSC: {
+        // must be a thunk, otherwise truffle commands may hang in CI
+        provider: () => new HDWalletProvider(privateKeyKovan, "https://data-seed-prebsc-2-s3.binance.org:8545/", 0, 3),
+        network_id: "97",
+        from: "0x56655FdfF46Ac28dB72603c5589A69B45B8604cc",
+        skipDryRun: true,
+    },
   },
   mocha: {
     useColors: true,

@@ -68,6 +68,9 @@ contract StakingPool is Ownable, ReentrancyGuard {
         view
         returns (uint256)
     {
+        if (_from >= _to) {
+          return 0;
+        }
         if (_to <= finishBlock) {
             return _to.sub(_from);
         } else if (_from >= finishBlock) {
@@ -116,7 +119,7 @@ contract StakingPool is Ownable, ReentrancyGuard {
         if (user.amount > 0) {
             pending = transferPendingReward(user);
         }
-        else{
+        else if (_amountToStake > 0){
             participants +=1;
         }
 
