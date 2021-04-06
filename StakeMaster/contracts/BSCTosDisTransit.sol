@@ -1,7 +1,3 @@
-/**
- *Submitted for verification at BscScan.com on 2020-09-21
-*/
-
 // Dependency file: contracts/BSC/libraries/TransferHelper.sol
 
 
@@ -302,10 +298,22 @@ contract BSCTosDisTransit {
     // key: transit_id
     mapping (bytes32 => bool) public executedMap;
     
+    uint private unlocked = 1;
+
+    modifier lock() {
+        require(unlocked == 1, 'Locked');
+        unlocked = 0;
+        _;
+        unlocked = 1;
+    }
+
     event Payback(address indexed from, address indexed token, uint amount);
     event Withdraw(bytes32 transitId, address indexed to, address indexed token, uint amount);
     event CollectFee(address indexed handler, uint amount);
-    
+    event ChangedSigner(address wallet);
+    event ChangedDevelopWallet(address wallet);
+    event ChangedDevelopFee(uint amount);
+
     constructor(address _signer, address _developer) public {
         signWallet = _signer;
         developWallet = _developer;
@@ -315,19 +323,22 @@ contract BSCTosDisTransit {
     function changeSigner(address _wallet) external {
         require(msg.sender == owner, "CHANGE_SIGNER_FORBIDDEN");
         signWallet = _wallet;
+        emit ChangedSigner(signWallet);
     }
     
     function changeDevelopWallet(address _wallet) external {
         require(msg.sender == owner, "CHANGE_DEVELOP_WALLET_FORBIDDEN");
         developWallet = _wallet;
+        emit ChangedDevelopWallet(developWallet);
     } 
     
     function changeDevelopFee(uint _amount) external {
         require(msg.sender == owner, "CHANGE_DEVELOP_FEE_FORBIDDEN");
         developFee = _amount;
+        emit ChangedDevelopFee(developFee);
     }
     
-    function collectFee() external {
+    function collectFee() external lock{
         require(msg.sender == owner, "FORBIDDEN");
         require(developWallet != address(0), "SETUP_DEVELOP_WALLET");
         require(totalFee > 0, "NO_FEE");
@@ -345,15 +356,15 @@ contract BSCTosDisTransit {
     }
     
     function withdrawTransitToken(
-    bytes calldata _signature,
-    bytes32 _transitId,
-    uint _amount,
-    address _token,
-    string calldata _name,
-    string calldata _symbol,
-    uint8 _decimals
+        bytes calldata _signature,
+        bytes32 _transitId,
+        uint _amount,
+        address _token,
+        string calldata _name,
+        string calldata _symbol,
+        uint8 _decimals
     ) external payable {
-        require(executedMap[_transitId] == false, "ALREADY_EXECUTED");
+        require(!executedMap[_transitId], "ALREADY_EXECUTED");
         bytes32 message = keccak256(abi.encodePacked(_transitId, msg.sender, _amount, _token, _name, _symbol, _decimals));
         require(_verify(message, _signature), "INVALID_SIGNATURE");
 
@@ -382,7 +393,8 @@ contract BSCTosDisTransit {
         signHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", _msg));
     }
     
-    function _recoverAddresses(bytes32 _hash, bytes memory _signatures) pure internal returns (address[] memory addresses)
+    function _recoverAddresses(bytes32 _hash, bytes memory _signatures) 
+             pure internal returns (address[] memory addresses)
     {
         uint8 v;
         bytes32 r;
@@ -395,7 +407,8 @@ contract BSCTosDisTransit {
         }
     }
     
-    function _parseSignature(bytes memory _signatures, uint _pos) pure internal returns (uint8 v, bytes32 r, bytes32 s)
+    function _parseSignature(bytes memory _signatures, uint _pos) 
+             pure internal returns (uint8 v, bytes32 r, bytes32 s)
     {
         uint offset = _pos * 65;
         assembly {
@@ -414,7 +427,8 @@ contract BSCTosDisTransit {
         return _signatures.length % 65 == 0 ? _signatures.length / 65 : 0;
     }
     
-    function _createToken (address _transitToken, string memory _name, string memory _symbol, uint8 _decimals) internal returns(address bscTosDisToken){
+    function _createToken (address _transitToken, string memory _name, string memory _symbol, uint8 _decimals) 
+             internal returns(address bscTosDisToken){
         bytes memory bytecode = type(TosDisERC20).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(_transitToken, _name, _symbol, _decimals));
             assembly {

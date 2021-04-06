@@ -1,7 +1,3 @@
-/**
- *Submitted for verification at Etherscan.io on 2020-10-07
-*/
-
 // Dependency file: contracts/ETH/libraries/SafeMath.sol
 
 
@@ -232,7 +228,10 @@ contract ETHTosDisTransit {
     event Transit(address indexed from, address indexed token, uint amount);
     event Withdraw(bytes32 paybackId, address indexed to, address indexed token, uint amount);
     event CollectFee(address indexed handler, uint amount);
-    
+    event ChangedSigner(address wallet);
+    event ChangedDevelopWallet(address wallet);
+    event ChangedDevelopFee(uint amount);
+
     constructor(address _WETH, address _signer, address _developer) public {
         WETH = _WETH;
         signWallet = _signer;
@@ -247,19 +246,22 @@ contract ETHTosDisTransit {
     function changeSigner(address _wallet) external {
         require(msg.sender == owner, "CHANGE_SIGNER_FORBIDDEN");
         signWallet = _wallet;
+        emit ChangedSigner(signWallet);
     }
     
-    function changeDevelopWallet(address _developWallet) external {
+    function changeDevelopWallet(address _wallet) external {
         require(msg.sender == owner, "CHANGE_DEVELOP_WALLET_FORBIDDEN");
-        developWallet = _developWallet;
+        developWallet = _wallet;
+        emit ChangedDevelopWallet(developWallet);
     } 
     
     function changeDevelopFee(uint _amount) external {
         require(msg.sender == owner, "CHANGE_DEVELOP_FEE_FORBIDDEN");
         developFee = _amount;
+        emit ChangedDevelopFee(developFee);
     }
     
-    function collectFee() external {
+    function collectFee() external lock{
         require(msg.sender == owner, "FORBIDDEN");
         require(developWallet != address(0), "SETUP_DEVELOP_WALLET");
         require(totalFee > 0, "NO_FEE");
@@ -279,8 +281,9 @@ contract ETHTosDisTransit {
         emit Transit(msg.sender, WETH, msg.value);
     }
     
-    function withdrawFromBSC(bytes calldata _signature, bytes32 _paybackId, address _token, uint _amount) external lock payable {
-        require(executedMap[_paybackId] == false, "ALREADY_EXECUTED");
+    function withdrawFromBSC(bytes calldata _signature, bytes32 _paybackId, address _token, uint _amount) 
+             external lock payable {
+        require(!executedMap[_paybackId], "ALREADY_EXECUTED");
         executedMap[_paybackId] = true;
         
         require(_amount > 0, "NOTHING_TO_WITHDRAW");
@@ -311,7 +314,8 @@ contract ETHTosDisTransit {
         signHash = keccak256(abi.encodePacked("\x19Ethereum Signed Message:\n32", _msg));
     }
     
-    function _recoverAddresses(bytes32 _hash, bytes memory _signatures) pure internal returns (address[] memory addresses)
+    function _recoverAddresses(bytes32 _hash, bytes memory _signatures) 
+             pure internal returns (address[] memory addresses)
     {
         uint8 v;
         bytes32 r;
@@ -324,7 +328,8 @@ contract ETHTosDisTransit {
         }
     }
     
-    function _parseSignature(bytes memory _signatures, uint _pos) pure internal returns (uint8 v, bytes32 r, bytes32 s)
+    function _parseSignature(bytes memory _signatures, uint _pos) 
+             pure internal returns (uint8 v, bytes32 r, bytes32 s)
     {
         uint offset = _pos * 65;
         assembly {
