@@ -9,7 +9,9 @@
     "0x5AE7Cac53d215187AFa8d4bBcC8310AB7712a8fb",
     "0x478406a3041e6c6980b157ad109e9641a94ff8b6",
     "0x3f09244C46e64F0940140242CF7dD318576cF799",
-    "0xe18be27D43dC3d98d4550898a1C394AcF8bbC5F7"
+    "0xe18be27D43dC3d98d4550898a1C394AcF8bbC5F7",
+    "0x588470fb780ccb6dd6f3371d33a775fb668b5c23",
+    "0x2b2376e75f09ce536a8b1bade40b51384444d2f6"
   ],
   "poolTokenImages": [
     {
@@ -27,6 +29,10 @@
     {
       "address": "0x54c9ea2e9c9e8ed865db4a4ce6711c2a0d5063ba",
       "image_url": "https://svgshare.com/i/Vei.svg"
+    },
+    {
+      "address": "0x851F7a700c5d67DB59612b871338a85526752c25",
+      "image_url": "https://argon.run/assets/img/argon-wiki/argon-logo-4k.png"
     }
   ]
 }
