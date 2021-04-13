@@ -13,11 +13,16 @@
     "0x588470fb780ccb6dd6f3371d33a775fb668b5c23",
     "0x2b2376e75f09ce536a8b1bade40b51384444d2f6",
     "0x8a05c12181b3de38cded287f6b020ad717982e70",
-    "0x37ec65d85311e66368cba0ee55445a1256cd5071"
+    "0x37ec65d85311e66368cba0ee55445a1256cd5071",
+    "0x287abfaf4f808870d8c613ea0a5d0a33964abbe1"
   ],
   "poolTokenImages": [
     {
       "address": "0x220B71671b649c03714dA9c621285943f3cbcDC6",
+      "image_url": "https://tosdis.finance/images/tosdislogo.svg"
+    },
+    {
+      "address": "0x57effde2759b68d86c544e88f7977e3314144859",
       "image_url": "https://tosdis.finance/images/tosdislogo.svg"
     },
     {
