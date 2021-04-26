@@ -18,7 +18,8 @@
     "0xba4753cc5541d96c721643caa06dba6eff4ab4fe",
     "0x23a5db7f53a9cc7b89d7d8ab682d4957a584d5cb",
     "0x8bfc43020aa402f2028c54cd3d73b622c15719d3",
-    "0xfea9d9fa5bf949015172250fd4768f45eb65f75a"
+    "0xfea9d9fa5bf949015172250fd4768f45eb65f75a",
+    "0x0c5c52052b758ded340356d3e435afb6bfab4ae1"
   ],
   "poolTokenImages": [
     {
@@ -44,6 +45,10 @@
     {
       "address": "0x851F7a700c5d67DB59612b871338a85526752c25",
       "image_url": "https://argon.run/assets/img/argon-wiki/argon-logo-4k.png"
+    },
+    {
+      "address": "0x6bfd576220e8444CA4Cc5f89Efbd7f02a4C94C16",
+      "image_url": "https://smaugs.com/assets/img/brand/smaugslogotype.png"
     }
   ]
 }
