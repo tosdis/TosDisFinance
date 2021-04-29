@@ -20,7 +20,8 @@
     "0x8bfc43020aa402f2028c54cd3d73b622c15719d3",
     "0xfea9d9fa5bf949015172250fd4768f45eb65f75a",
     "0x0c5c52052b758ded340356d3e435afb6bfab4ae1",
-    "0xce208a0f43f5ad7df4a5b36ba2d68cd3dc234bf8"
+    "0xce208a0f43f5ad7df4a5b36ba2d68cd3dc234bf8",
+    "0x2c2a0C6F41d58B56dC50f70Cd963A30E59B2B4d9",
   ],
   "poolTokenImages": [
     {
@@ -50,6 +51,10 @@
     {
       "address": "0x6bfd576220e8444CA4Cc5f89Efbd7f02a4C94C16",
       "image_url": "https://smaugs.com/assets/img/brand/smaugslogotype.png"
+    },
+    {
+      "address": "0x4ee438be38f8682abb089f2bfea48851c5e71eaf",
+      "image_url": "https://cdn.cryptonovae.com/Logo-yae.svg"
     }
   ]
 }
