@@ -22,7 +22,8 @@
     "0x0c5c52052b758ded340356d3e435afb6bfab4ae1",
     "0xce208a0f43f5ad7df4a5b36ba2d68cd3dc234bf8",
     "0x2c2a0C6F41d58B56dC50f70Cd963A30E59B2B4d9",
-    "0xcc5Cb8B11A5413C4687DEb919B7034801295D0F8"
+    "0xcc5Cb8B11A5413C4687DEb919B7034801295D0F8",
+    "0x9b80d0fdf2ceb27e7c34575bacbaedc13fff99e6"
   ],
   "poolTokenImages": [
     {
@@ -60,6 +61,10 @@
     {
       "address": "0x8A9030c0ED9A5b9C7Ab39EBfEE11D90aF9945f6F",
       "image_url": "https://safelaunchpad.github.io/images/favicon.png"
+    },
+    {
+      "address": "0x7475A30F545FfCC1B43aA6206116534AC2f54be6",
+      "image_url": "https://safelaunchpad.github.io/images/logo.png"
     }
   ]
 }
