@@ -25,7 +25,8 @@
     "0xaaaa14624043d4afc716747af62e8027df31b21d",
     "0x4eAc69e732f715F2F28FB0edd9151bC5e7409dc2",
     "0x941DE8A5803f7DeE6ef44D48be918121DaBa28DD",
-    "0x1159eb1062e597093ed7cb72da9f4f0f57eab75d"
+    "0x1159eb1062e597093ed7cb72da9f4f0f57eab75d",
+    "0x3E33cD8363E205692d34e45359c4cFC4C7298b46"
   ],
   "poolTokenImages": [
     {
@@ -59,6 +60,7 @@
     {
       "address": "0x4ee438be38f8682abb089f2bfea48851c5e71eaf",
       "image_url": "https://cdn.cryptonovae.com/Logo-yae.svg"
-    }
-  ]
-}
+    },
+    {
+      "address": "0x0a509c02129c2c18aee6394a54aec873782642df",
+      "image_url": "https://miro.medium.com/max/8000/1*FsJDxFUnSXlatj3-WS_FhA.png"
