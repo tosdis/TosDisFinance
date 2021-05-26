@@ -31,7 +31,8 @@
     "0x588470fb780ccb6dd6f3371d33a775fb668b5c23",
     "0xbba5d7fd42b7a597dd17a6647ba7462d1f93cdb7",
     "0x873f7b36c32251ec2879d44fab5b6b55c8f0f6db",
-    "0x3315bac2de18b75ecae7399ac9ae474702d1b01d"
+    "0x3315bac2de18b75ecae7399ac9ae474702d1b01d",
+    "0x956f9aa1e640aedfa18f258a2128136bc10c2385"
   ],
   "poolTokenImages": [
     {
@@ -69,6 +70,10 @@
     {
       "address": "0x0a509c02129c2c18aee6394a54aec873782642df",
       "image_url": "https://miro.medium.com/max/8000/1*FsJDxFUnSXlatj3-WS_FhA.png"
+    },
+    {
+      "address": "0xf63400ee0420ce5b1ebdee0c942d7de1c734a41f",
+      "image_url": "https://i.hizliresim.com/t5byk7o.png"
     }
   ]
 }
