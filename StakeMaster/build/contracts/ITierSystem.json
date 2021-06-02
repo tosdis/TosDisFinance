@@ -1,0 +1,387 @@
+{
+  "contractName": "ITierSystem",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxEthPayment",
+          "type": "uint256"
+        }
+      ],
+      "name": "getMaxEthPayment",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"maxEthPayment\",\"type\":\"uint256\"}],\"name\":\"getMaxEthPayment\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/ITierSystem.sol\":\"ITierSystem\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/ITierSystem.sol\":{\"keccak256\":\"0xf35f3e4cdfb0431a3c8db4b6e523ea842f8079cf93d142ef05d856b6a04e4bf1\",\"urls\":[\"bzz-raw://81ee996a4b9ab6764a9e6e0e1e91290010acb5fa0bf2691a204cda339f5601cb\",\"dweb:/ipfs/QmXkwPmY77QAu4623udJShPr3iPVqJXkS9ziX6cFfzTvvr\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity 0.6.12;\r\ninterface ITierSystem {\r\n    \r\n    // function setTier(uint256 _vipDisAmount, uint256 _vipPercent, \r\n    //                  uint256 _holdersDisAmount, uint256 _holdersPercent, \r\n    //                  uint256 _publicDisAmount, uint256 _publicPercent) public;\r\n\r\n    // function addBalances(address[] memory _addresses, uint256[] memory _balances) external;\r\n\r\n    function getMaxEthPayment(address user, uint256 maxEthPayment)\r\n        external\r\n        view\r\n        returns (uint256);\r\n}",
+  "sourcePath": "D:\\Projects\\TosDisFinance\\StakeMaster\\contracts\\interfaces\\ITierSystem.sol",
+  "ast": {
+    "absolutePath": "/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/ITierSystem.sol",
+    "exportedSymbols": {
+      "ITierSystem": [
+        6001
+      ]
+    },
+    "id": 6002,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 5991,
+        "literals": [
+          "solidity",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:16"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 6001,
+        "linearizedBaseContracts": [
+          6001
+        ],
+        "name": "ITierSystem",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "90d8260f",
+            "id": 6000,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getMaxEthPayment",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 5996,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5993,
+                  "mutability": "mutable",
+                  "name": "user",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6000,
+                  "src": "417:12:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 5992,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "417:7:16",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 5995,
+                  "mutability": "mutable",
+                  "name": "maxEthPayment",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6000,
+                  "src": "431:21:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5994,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "431:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "416:37:16"
+            },
+            "returnParameters": {
+              "id": 5999,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 5998,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6000,
+                  "src": "504:7:16",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 5997,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "504:7:16",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "503:9:16"
+            },
+            "scope": 6001,
+            "src": "391:122:16",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 6002,
+        "src": "25:491:16"
+      }
+    ],
+    "src": "0:516:16"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/ITierSystem.sol",
+      "exportedSymbols": {
+        "ITierSystem": [
+          6001
+        ]
+      },
+      "license": null
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.6",
+            ".12"
+          ]
+        },
+        "id": 5991,
+        "name": "PragmaDirective",
+        "src": "0:23:16"
+      },
+      {
+        "attributes": {
+          "abstract": false,
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            6001
+          ],
+          "name": "ITierSystem",
+          "scope": 6002
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "90d8260f",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "getMaxEthPayment",
+              "overrides": null,
+              "scope": 6001,
+              "stateMutability": "view",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "user",
+                      "overrides": null,
+                      "scope": 6000,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 5992,
+                        "name": "ElementaryTypeName",
+                        "src": "417:7:16"
+                      }
+                    ],
+                    "id": 5993,
+                    "name": "VariableDeclaration",
+                    "src": "417:12:16"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "maxEthPayment",
+                      "overrides": null,
+                      "scope": 6000,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 5994,
+                        "name": "ElementaryTypeName",
+                        "src": "431:7:16"
+                      }
+                    ],
+                    "id": 5995,
+                    "name": "VariableDeclaration",
+                    "src": "431:21:16"
+                  }
+                ],
+                "id": 5996,
+                "name": "ParameterList",
+                "src": "416:37:16"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "",
+                      "overrides": null,
+                      "scope": 6000,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 5997,
+                        "name": "ElementaryTypeName",
+                        "src": "504:7:16"
+                      }
+                    ],
+                    "id": 5998,
+                    "name": "VariableDeclaration",
+                    "src": "504:7:16"
+                  }
+                ],
+                "id": 5999,
+                "name": "ParameterList",
+                "src": "503:9:16"
+              }
+            ],
+            "id": 6000,
+            "name": "FunctionDefinition",
+            "src": "391:122:16"
+          }
+        ],
+        "id": 6001,
+        "name": "ContractDefinition",
+        "src": "25:491:16"
+      }
+    ],
+    "id": 6002,
+    "name": "SourceUnit",
+    "src": "0:516:16"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.12+commit.27d51765.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.0",
+  "updatedAt": "2021-06-02T11:07:10.624Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

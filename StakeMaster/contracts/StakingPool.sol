@@ -10,16 +10,17 @@ contract StakingPool is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
+    bool public allowReinvest;
     IERC20 public stakingToken;
     IERC20 public rewardToken;
-    uint256 public startBlock;
-    uint256 public lastRewardBlock;
-    uint256 public finishBlock;
+    uint256 public startTime;
+    uint256 public lastRewardTime;
+    uint256 public finishTime;
     uint256 public allStakedAmount;
     uint256 public allPaidReward;
     uint256 public allRewardDebt;
     uint256 public poolTokenAmount;
-    uint256 public rewardPerBlock;
+    uint256 public rewardPerSec;
     uint256 public accTokensPerShare; // Accumulated tokens per share
     uint256 public participants; //Count of participants
 
@@ -27,42 +28,49 @@ contract StakingPool is Ownable, ReentrancyGuard {
     struct UserInfo {
         uint256 amount;     // How many tokens the user has staked.
         uint256 rewardDebt; // Reward debt
+        bool registrated;
     }
 
     mapping (address => UserInfo) public userInfo;
 
-    event FinishBlockUpdated(uint256 newFinishBlock);
     event PoolReplenished(uint256 amount);
-    event TokensStaked(address indexed user, uint256 amount, uint256 reward);
+    event TokensStaked(address indexed user, uint256 amount, uint256 reward, bool reinvest);
     event StakeWithdrawn(address indexed user, uint256 amount, uint256 reward);
     event EmergencyWithdraw(address indexed user, uint256 amount);
 
     event WithdrawPoolRemainder(address indexed user, uint256 amount);
+    event UpdateFinishTime(uint256 addedTokenAmount, uint256 newFinishTime);
 
     constructor(
         IERC20 _stakingToken,
         IERC20 _poolToken,
-        uint256 _startBlock,
-        uint256 _finishBlock,
+        uint256 _startTime,
+        uint256 _finishTime,
         uint256 _poolTokenAmount
     ) public {
         stakingToken = _stakingToken;
         rewardToken = _poolToken;
-        require(
-            _startBlock < _finishBlock,
-            "start block must be less than finish block"
-        );
-        require(
-            _finishBlock > block.number,
-            "finish block must be more than current block"
-        );
-        startBlock = _startBlock;
-        lastRewardBlock = startBlock;
-        finishBlock = _finishBlock;
+        require(_startTime < _finishTime, "Start must be less than finish");
+        require(_startTime > now, "Start must be more than now");
+
+        startTime = _startTime;
+        lastRewardTime = startTime;
+        finishTime = _finishTime;
         poolTokenAmount = _poolTokenAmount;
-        rewardPerBlock = _poolTokenAmount.div(_finishBlock.sub(_startBlock));
+        rewardPerSec = _poolTokenAmount.div(_finishTime.sub(_startTime));
+
+        allowReinvest = address(stakingToken) == address(rewardToken);
     }
 
+    function getUserInfo(address user)
+        external
+        view
+        returns (uint256, uint256)
+    {
+        UserInfo memory info = userInfo[user];
+        return (info.amount, info.rewardDebt);
+    }
+    
     function getMultiplier(uint256 _from, uint256 _to)
         internal
         view
@@ -71,12 +79,12 @@ contract StakingPool is Ownable, ReentrancyGuard {
         if (_from >= _to) {
           return 0;
         }
-        if (_to <= finishBlock) {
+        if (_to <= finishTime) {
             return _to.sub(_from);
-        } else if (_from >= finishBlock) {
+        } else if (_from >= finishTime) {
             return 0;
         } else {
-            return finishBlock.sub(_from);
+            return finishTime.sub(_from);
         }
     }
 
@@ -84,9 +92,9 @@ contract StakingPool is Ownable, ReentrancyGuard {
     function pendingReward(address _user) external view returns (uint256) {
         UserInfo storage user = userInfo[_user];
         uint256 tempAccTokensPerShare = accTokensPerShare;
-        if (block.number > lastRewardBlock && allStakedAmount != 0) {
-            uint256 multiplier = getMultiplier(lastRewardBlock, block.number);
-            uint256 reward = multiplier.mul(rewardPerBlock);
+        if (now > lastRewardTime && allStakedAmount != 0) {
+            uint256 multiplier = getMultiplier(lastRewardTime, now);
+            uint256 reward = multiplier.mul(rewardPerSec);
             tempAccTokensPerShare = accTokensPerShare.add(
                 reward.mul(1e18).div(allStakedAmount)
             );
@@ -96,43 +104,61 @@ contract StakingPool is Ownable, ReentrancyGuard {
 
     // Update reward variables of the given pool to be up-to-date.
     function updatePool() public {
-        if (block.number <= lastRewardBlock) {
+        if (now <= lastRewardTime) {
             return;
         }
         if (allStakedAmount == 0) {
-            lastRewardBlock = block.number;
+            lastRewardTime = now;
             return;
         }
 
-        uint256 multiplier = getMultiplier(lastRewardBlock, block.number);
-        uint256 reward = multiplier.mul(rewardPerBlock);
+        uint256 multiplier = getMultiplier(lastRewardTime, now);
+        uint256 reward = multiplier.mul(rewardPerSec);
         accTokensPerShare = accTokensPerShare.add(
             reward.mul(1e18).div(allStakedAmount)
         );
-        lastRewardBlock = block.number;
+        lastRewardTime = now;
+    }
+
+    function reinvestTokens() external nonReentrant{
+        innerStakeTokens(0, true);
     }
 
     function stakeTokens(uint256 _amountToStake) external nonReentrant{
+        innerStakeTokens(_amountToStake, false);
+    }
+
+    function innerStakeTokens(uint256 _amountToStake, bool reinvest) private{
         updatePool();
         uint256 pending = 0;
         UserInfo storage user = userInfo[msg.sender];
-        if (user.amount > 0) {
-            pending = transferPendingReward(user);
-        }
-        else if (_amountToStake > 0){
+
+        if(!user.registrated){
+            user.registrated = true;
             participants +=1;
         }
-
+        if (user.amount > 0) {
+            pending = transferPendingReward(user, reinvest);
+            if(reinvest)
+            {
+                require(allowReinvest, "Reinvest disabled");
+                user.amount = user.amount.add(pending);
+                allStakedAmount = allStakedAmount.add(pending);
+            }
+        }
         if (_amountToStake > 0) {
+            uint256 balanceBefore = stakingToken.balanceOf(address(this));
             stakingToken.safeTransferFrom(msg.sender, address(this), _amountToStake);
+            uint256 received = stakingToken.balanceOf(address(this)) - balanceBefore;
+            _amountToStake = received;
             user.amount = user.amount.add(_amountToStake);
             allStakedAmount = allStakedAmount.add(_amountToStake);
         }
-
+        
         allRewardDebt = allRewardDebt.sub(user.rewardDebt);
         user.rewardDebt = user.amount.mul(accTokensPerShare).div(1e18);
         allRewardDebt = allRewardDebt.add(user.rewardDebt);
-        emit TokensStaked(msg.sender, _amountToStake, pending);
+        emit TokensStaked(msg.sender, _amountToStake, pending, reinvest);
     }
 
     // Leave the pool. Claim back your tokens.
@@ -141,14 +167,11 @@ contract StakingPool is Ownable, ReentrancyGuard {
         UserInfo storage user = userInfo[msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
         updatePool();
-        uint256 pending = transferPendingReward(user);
+        uint256 pending = transferPendingReward(user, false);
 
         if (_amount > 0) {
             user.amount = user.amount.sub(_amount);
             stakingToken.safeTransfer(msg.sender, _amount);
-            if(user.amount == 0){
-                participants -= 1;
-            }
         }
         allRewardDebt = allRewardDebt.sub(user.rewardDebt);
         user.rewardDebt = user.amount.mul(accTokensPerShare).div(1e18);
@@ -158,11 +181,13 @@ contract StakingPool is Ownable, ReentrancyGuard {
         emit StakeWithdrawn(msg.sender, _amount, pending);
     }
 
-    function transferPendingReward(UserInfo memory user) private returns (uint256) {
+    function transferPendingReward(UserInfo memory user, bool reinvest) private returns (uint256) {
         uint256 pending = user.amount.mul(accTokensPerShare).div(1e18).sub(user.rewardDebt);
 
         if (pending > 0) {
-            rewardToken.safeTransfer(msg.sender, pending);
+            if(!reinvest){
+                rewardToken.safeTransfer(msg.sender, pending);
+            }
             allPaidReward = allPaidReward.add(pending);
         }
 
@@ -180,13 +205,12 @@ contract StakingPool is Ownable, ReentrancyGuard {
             allRewardDebt = allRewardDebt.sub(user.rewardDebt);
             user.amount = 0;
             user.rewardDebt = 0;
-            participants -= 1;
         }
     }
 
 
     function withdrawPoolRemainder() external onlyOwner nonReentrant{
-        require(block.number > finishBlock, "Allow after finish");
+        require(now > finishTime, "Allow after finish");
         updatePool();
         uint256 pending = allStakedAmount.mul(accTokensPerShare).div(1e18).sub(allRewardDebt);
         uint256 returnAmount = poolTokenAmount.sub(allPaidReward).sub(pending);
@@ -194,5 +218,14 @@ contract StakingPool is Ownable, ReentrancyGuard {
 
         rewardToken.safeTransfer(msg.sender, returnAmount);
         emit WithdrawPoolRemainder(msg.sender, returnAmount);
+    }
+
+    function extendDuration(uint256 _addTokenAmount) external onlyOwner nonReentrant{
+        require(now < finishTime, "Pool was finished");
+        rewardToken.safeTransferFrom(msg.sender, address(this), _addTokenAmount);     
+        poolTokenAmount = poolTokenAmount.add(_addTokenAmount);
+        finishTime = finishTime.add(_addTokenAmount.div(rewardPerSec));
+
+        emit UpdateFinishTime(_addTokenAmount, finishTime);
     }
 }

@@ -17,7 +17,7 @@ contract StakeMaster is Ownable {
     uint256 public burnPercent;
     uint256 public divider;
 
-    event StakingPoolCreated(address owner, address pool, address stakingToken, address poolToken, uint256 startBlock, uint256 finishBlock, uint256 poolTokenAmount);
+    event StakingPoolCreated(address owner, address pool, address stakingToken, address poolToken, uint256 startTime, uint256 finishTime, uint256 poolTokenAmount);
     event TokenFeeUpdated(address newFeeToken);
     event FeeAmountUpdated(uint256 newFeeAmount);
     event BurnPercentUpdated(uint256 newBurnPercent, uint256 divider);
@@ -69,8 +69,8 @@ contract StakeMaster is Ownable {
     function createStakingPool(
         IERC20 _stakingToken,
         IERC20 _poolToken,
-        uint256 _startBlock,
-        uint256 _finishBlock,
+        uint256 _startTime,
+        uint256 _finishTime,
         uint256 _poolTokenAmount
     ) external {
 
@@ -82,16 +82,19 @@ contract StakeMaster is Ownable {
                 feeWallet,
                 feeAmount.sub(burnAmount)
             );
-            feeToken.safeTransferFrom(msg.sender, address(this), burnAmount);
-            feeToken.burn(burnAmount);
+            
+            if(burnAmount > 0) {
+                feeToken.safeTransferFrom(msg.sender, address(this), burnAmount);
+                feeToken.burn(burnAmount);
+            }
         }
 
         StakingPool stakingPool =
             new StakingPool(
                 _stakingToken,
                 _poolToken,
-                _startBlock,
-                _finishBlock,
+                _startTime,
+                _finishTime,
                 _poolTokenAmount
             );
         stakingPool.transferOwnership(msg.sender);
@@ -101,8 +104,10 @@ contract StakeMaster is Ownable {
             address(stakingPool),
             _poolTokenAmount
         );
+        
+        require(_poolToken.balanceOf(address(stakingPool)) == _poolTokenAmount,  "Unsupported token");
 
-        emit StakingPoolCreated(msg.sender, address(stakingPool), address(_stakingToken), address(_poolToken), _startBlock, _finishBlock, _poolTokenAmount);
+        emit StakingPoolCreated(msg.sender, address(stakingPool), address(_stakingToken), address(_poolToken), _startTime, _finishTime, _poolTokenAmount);
     }
 
     function isContract(address _addr) private view returns (bool) {

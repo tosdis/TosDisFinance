@@ -1,0 +1,844 @@
+{
+  "contractName": "IidoCreator",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_tokenPrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "contract ERC20",
+          "name": "_rewardToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_startTimestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_finishTimestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_startClaimTimestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_minEthPayment",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_maxEthPayment",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_maxDistributedTokenAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "_hasWhitelisting",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "_enableTierSystem",
+          "type": "bool"
+        }
+      ],
+      "name": "createIDO",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.12+commit.27d51765\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_tokenPrice\",\"type\":\"uint256\"},{\"internalType\":\"contract ERC20\",\"name\":\"_rewardToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_startTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_finishTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_startClaimTimestamp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_minEthPayment\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_maxEthPayment\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_maxDistributedTokenAmount\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"_hasWhitelisting\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"_enableTierSystem\",\"type\":\"bool\"}],\"name\":\"createIDO\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/IidoCreator.sol\":\"IidoCreator\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/IidoCreator.sol\":{\"keccak256\":\"0x7c52ecf1a9ff29e73513f1841c212a780d6b489d69666347e1be6b0c6a300140\",\"urls\":[\"bzz-raw://272ac33ba8340ee485b62ad83310d956878929d33b40ea779635f757f41ce22b\",\"dweb:/ipfs/QmT4Rk9NZrdNTziMH6GRKtKUpJRUPGDjNEQwEuB2YRUyM2\"]},\"@openzeppelin/contracts/GSN/Context.sol\":{\"keccak256\":\"0x8d3cb350f04ff49cfb10aef08d87f19dcbaecc8027b0bed12f3275cd12f38cf0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ded47ec7c96750f9bd04bbbc84f659992d4ba901cb7b532a52cd468272cf378f\",\"dweb:/ipfs/QmfBrGtQP7rZEqEg6Wz6jh2N2Kukpj1z5v3CGWmAqrzm96\"]},\"@openzeppelin/contracts/math/SafeMath.sol\":{\"keccak256\":\"0x3b21f2c8d626de3b9925ae33e972d8bf5c8b1bffb3f4ee94daeed7d0679036e6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7f8d45329fecbf0836ad7543330c3ecd0f8d0ffa42d4016278c3eb2215fdcdfe\",\"dweb:/ipfs/QmXWLT7GcnHtA5NiD6MFi2CV3EWJY4wv5mLNnypqYDrxL3\"]},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0xcbd85c86627a47fd939f1f4ee3ba626575ff2a182e1804b29f5136394449b538\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://53c6a80c519bb9356aad28efa9a1ec31603860eb759d2dc57f545fcae1dd1aca\",\"dweb:/ipfs/QmfRS6TtMNUHhvgLHXK21qKNnpn2S7g2Yd1fKaHKyFiJsR\"]},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x5f02220344881ce43204ae4a6281145a67bc52c2bb1290a791857df3d19d78f5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://24427744bd3e6cb73c17010119af12a318289c0253a4d9acb8576c9fb3797b08\",\"dweb:/ipfs/QmTLDqpKRBuxGxRAmjgXt9AkXyACW3MtKzi7PYjm5iMfGC\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity 0.6.12;\r\nimport \"@openzeppelin/contracts/token/ERC20/ERC20.sol\";\r\ninterface IidoCreator {\r\n    function createIDO(\r\n        uint256 _tokenPrice,\r\n        ERC20 _rewardToken,\r\n        uint256 _startTimestamp,\r\n        uint256 _finishTimestamp,\r\n        uint256 _startClaimTimestamp,\r\n        uint256 _minEthPayment,\r\n        uint256 _maxEthPayment,\r\n        uint256 _maxDistributedTokenAmount,\r\n        bool _hasWhitelisting,\r\n        bool _enableTierSystem\r\n    ) external;\r\n}",
+  "sourcePath": "D:/Projects/TosDisFinance/StakeMaster/contracts/interfaces/IidoCreator.sol",
+  "ast": {
+    "absolutePath": "/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/IidoCreator.sol",
+    "exportedSymbols": {
+      "IidoCreator": [
+        6062
+      ]
+    },
+    "id": 6063,
+    "license": null,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 6037,
+        "literals": [
+          "solidity",
+          "0.6",
+          ".12"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:18"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "id": 6038,
+        "nodeType": "ImportDirective",
+        "scope": 6063,
+        "sourceUnit": 7234,
+        "src": "25:55:18",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 6062,
+        "linearizedBaseContracts": [
+          6062
+        ],
+        "name": "IidoCreator",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "1b655af9",
+            "id": 6061,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "createIDO",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 6059,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 6040,
+                  "mutability": "mutable",
+                  "name": "_tokenPrice",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "140:19:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6039,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "140:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6042,
+                  "mutability": "mutable",
+                  "name": "_rewardToken",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "170:18:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$7233",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "contractScope": null,
+                    "id": 6041,
+                    "name": "ERC20",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 7233,
+                    "src": "170:5:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$7233",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6044,
+                  "mutability": "mutable",
+                  "name": "_startTimestamp",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "199:23:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6043,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "199:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6046,
+                  "mutability": "mutable",
+                  "name": "_finishTimestamp",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "233:24:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6045,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "233:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6048,
+                  "mutability": "mutable",
+                  "name": "_startClaimTimestamp",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "268:28:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6047,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "268:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6050,
+                  "mutability": "mutable",
+                  "name": "_minEthPayment",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "307:22:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6049,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "307:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6052,
+                  "mutability": "mutable",
+                  "name": "_maxEthPayment",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "340:22:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6051,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "340:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6054,
+                  "mutability": "mutable",
+                  "name": "_maxDistributedTokenAmount",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "373:34:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 6053,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "373:7:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6056,
+                  "mutability": "mutable",
+                  "name": "_hasWhitelisting",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "418:21:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 6055,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "418:4:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 6058,
+                  "mutability": "mutable",
+                  "name": "_enableTierSystem",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 6061,
+                  "src": "450:22:18",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 6057,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "450:4:18",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "129:350:18"
+            },
+            "returnParameters": {
+              "id": 6060,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "488:0:18"
+            },
+            "scope": 6062,
+            "src": "111:378:18",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 6063,
+        "src": "82:410:18"
+      }
+    ],
+    "src": "0:492:18"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "/D/Projects/TosDisFinance/StakeMaster/contracts/interfaces/IidoCreator.sol",
+      "exportedSymbols": {
+        "IidoCreator": [
+          6062
+        ]
+      },
+      "license": null
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.6",
+            ".12"
+          ]
+        },
+        "id": 6037,
+        "name": "PragmaDirective",
+        "src": "0:23:18"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 7234,
+          "absolutePath": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+          "file": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+          "scope": 6063,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 6038,
+        "name": "ImportDirective",
+        "src": "25:55:18"
+      },
+      {
+        "attributes": {
+          "abstract": false,
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            6062
+          ],
+          "name": "IidoCreator",
+          "scope": 6063
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "1b655af9",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "createIDO",
+              "overrides": null,
+              "scope": 6062,
+              "stateMutability": "nonpayable",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_tokenPrice",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 6039,
+                        "name": "ElementaryTypeName",
+                        "src": "140:7:18"
+                      }
+                    ],
+                    "id": 6040,
+                    "name": "VariableDeclaration",
+                    "src": "140:19:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_rewardToken",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "contract ERC20",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "ERC20",
+                          "referencedDeclaration": 7233,
+                          "type": "contract ERC20"
+                        },
+                        "id": 6041,
+                        "name": "UserDefinedTypeName",
+                        "src": "170:5:18"
+                      }
+                    ],
+                    "id": 6042,
+                    "name": "VariableDeclaration",
+                    "src": "170:18:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_startTimestamp",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 6043,
+                        "name": "ElementaryTypeName",
+                        "src": "199:7:18"
+                      }
+                    ],
+                    "id": 6044,
+                    "name": "VariableDeclaration",
+                    "src": "199:23:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_finishTimestamp",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 6045,
+                        "name": "ElementaryTypeName",
+                        "src": "233:7:18"
+                      }
+                    ],
+                    "id": 6046,
+                    "name": "VariableDeclaration",
+                    "src": "233:24:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_startClaimTimestamp",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 6047,
+                        "name": "ElementaryTypeName",
+                        "src": "268:7:18"
+                      }
+                    ],
+                    "id": 6048,
+                    "name": "VariableDeclaration",
+                    "src": "268:28:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_minEthPayment",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 6049,
+                        "name": "ElementaryTypeName",
+                        "src": "307:7:18"
+                      }
+                    ],
+                    "id": 6050,
+                    "name": "VariableDeclaration",
+                    "src": "307:22:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_maxEthPayment",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 6051,
+                        "name": "ElementaryTypeName",
+                        "src": "340:7:18"
+                      }
+                    ],
+                    "id": 6052,
+                    "name": "VariableDeclaration",
+                    "src": "340:22:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_maxDistributedTokenAmount",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint256",
+                          "type": "uint256"
+                        },
+                        "id": 6053,
+                        "name": "ElementaryTypeName",
+                        "src": "373:7:18"
+                      }
+                    ],
+                    "id": 6054,
+                    "name": "VariableDeclaration",
+                    "src": "373:34:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_hasWhitelisting",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 6055,
+                        "name": "ElementaryTypeName",
+                        "src": "418:4:18"
+                      }
+                    ],
+                    "id": 6056,
+                    "name": "VariableDeclaration",
+                    "src": "418:21:18"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "_enableTierSystem",
+                      "overrides": null,
+                      "scope": 6061,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 6057,
+                        "name": "ElementaryTypeName",
+                        "src": "450:4:18"
+                      }
+                    ],
+                    "id": 6058,
+                    "name": "VariableDeclaration",
+                    "src": "450:22:18"
+                  }
+                ],
+                "id": 6059,
+                "name": "ParameterList",
+                "src": "129:350:18"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 6060,
+                "name": "ParameterList",
+                "src": "488:0:18"
+              }
+            ],
+            "id": 6061,
+            "name": "FunctionDefinition",
+            "src": "111:378:18"
+          }
+        ],
+        "id": 6062,
+        "name": "ContractDefinition",
+        "src": "82:410:18"
+      }
+    ],
+    "id": 6063,
+    "name": "SourceUnit",
+    "src": "0:492:18"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.12+commit.27d51765.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.0",
+  "updatedAt": "2021-06-02T11:07:10.627Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
