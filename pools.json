@@ -94,6 +94,10 @@
     {
       "address": "0xf0b9893a7be02c9ff89a483054e97a5a578a7206",
       "image_url": "https://investdex.io/dist/src/assets/images/logo.png"
+    },
+    {
+      "address": "0x853a8ab1c365ea54719eb13a54d6b22f1fbe7feb",
+      "image_url": "https://investdex.io/dist/src/assets/images/logo.png"
     }
   ]
 }
