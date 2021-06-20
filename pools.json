@@ -44,7 +44,8 @@
     "0xc1551fa64068a051aba9f719f6671ae5e7889afb",
     "0x505d0df02e17b5e058035ff4af1a3becfb986c85",
     "0x234787a889ceec06c0ccffde84353d4dacba635f",
-    "0x16ca257aee573455def1f6ec5d0a0cbcc8f63975"
+    "0x16ca257aee573455def1f6ec5d0a0cbcc8f63975",
+    "0x07404e34a57ecb49c8a193cc1db634cebcb13bff"
   ],
   "poolTokenImages": [
     {
@@ -102,6 +103,10 @@
     {
       "address": "0x853a8ab1c365ea54719eb13a54d6b22f1fbe7feb",
       "image_url": "https://investdex.io/dist/src/assets/images/logo.png"
+    },
+    {
+      "address": "0xc14df1e2fff3708816495e7364ff274aceecad91",
+      "image_url": "https://www.n1ce.community/wp-content/uploads/2021/06/token_logo.png"
     }
   ]
 }
