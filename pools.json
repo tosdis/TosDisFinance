@@ -53,7 +53,8 @@
     "0x329daf2ca15325ed208e86fc183ed9581335d66f",
     "0x61097cb0b7a9fb3af535e4e46d5b5d7e62e8e8a0",
     "0x45f90697c0627d19bea52e67e410673d444155a9",
-    "0x7982e4fa621ddb84a34ee3d7bf2ddcc3c3389945"
+    "0x7982e4fa621ddb84a34ee3d7bf2ddcc3c3389945",
+    "0x51a8cd3b1fce58dd48412afd532bd781779296e5"
   ],
   "poolTokenImages": [
     {
@@ -115,6 +116,10 @@
     {
       "address": "0xc14df1e2fff3708816495e7364ff274aceecad91",
       "image_url": "https://www.n1ce.community/wp-content/uploads/2021/06/token_logo.png"
+    },
+    {
+      "address": "0x9eab0a93b0cd5d904493694f041bdcedb97b88c6",
+      "image_url": "https://stosentertainment.com/assets/stos-transparent-2.png"
     }
   ]
 }
