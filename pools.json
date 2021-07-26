@@ -66,7 +66,8 @@
     "0x637ba95703777c5bd5d80b7c091f7c4a95f02153",
     "0x5d9e5f4986a2b17b3de531542ef11bb48120eb31",
     "0x98977a944e41a340d7c7b6e56e82a419c024e956",
-    "0x27f80c4524abdb318e459b03a53c537c81647957"
+    "0x27f80c4524abdb318e459b03a53c537c81647957",
+    "0x9896227E38B061e4374AaACfBEBc0E8331bcC3B5"
     
   ],
   "poolTokenImages": [
@@ -145,6 +146,10 @@
     {
       "address": "0x40eb746dee876ac1e78697b7ca85142d178a1fc8",
       "image_url": "https://i.ibb.co/DQcqhfv/iagon1-whitebg-transparent-small.png"
+    },
+    {
+      "address": "0x5cc61a78f164885776aa610fb0fe1257df78e59b",
+      "image_url": "https://app.spiritswap.finance/images/price-token.png"
     }
   ]
 }
