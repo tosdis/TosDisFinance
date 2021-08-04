@@ -151,6 +151,10 @@
     {
       "address": "0x5cc61a78f164885776aa610fb0fe1257df78e59b",
       "image_url": "https://app.spiritswap.finance/images/price-token.png"
+    },
+    {
+      "address": "0x765a6c174202a78561c986684df1004cbf38faeb",
+      "image_url": "https://cryptoarena.org/wp-content/uploads/2021/08/pink.svg"
     }
   ]
 }
