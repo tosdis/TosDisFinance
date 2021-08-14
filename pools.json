@@ -68,7 +68,8 @@
     "0x98977a944e41a340d7c7b6e56e82a419c024e956",
     "0x27f80c4524abdb318e459b03a53c537c81647957",
     "0x9896227E38B061e4374AaACfBEBc0E8331bcC3B5",
-    "0x97508872c7e82ef957799e85ac64cb273d918178"
+    "0x97508872c7e82ef957799e85ac64cb273d918178",
+    "0x44eF57E7a25481F0e4B4365741393e1da5C4aCd6"
     
   ],
   "poolTokenImages": [
@@ -155,6 +156,16 @@
     {
       "address": "0x765a6c174202a78561c986684df1004cbf38faeb",
       "image_url": "https://cryptoarena.org/wp-content/uploads/2021/08/pink.svg"
+    },
+    {
+      "address": "0x6D0F5149c502faf215C89ab306ec3E50b15e2892",
+      "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7348.png"
+    },
+    {
+      "address": "0xAF00aAc2431b04EF6afD904d19B08D5146e3A9A0",
+      "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7348.png"
     }
+
+
   ]
 }
