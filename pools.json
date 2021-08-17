@@ -169,6 +169,10 @@
     {
       "address": "0xAF00aAc2431b04EF6afD904d19B08D5146e3A9A0",
       "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/7348.png"
+    },
+    {
+      "address": "0x56aa0237244c67b9a854b4efe8479cca0b105289",
+      "image_url": "https://raw.githubusercontent.com/wallet-now/wallet-now/master/img/walletnow_v2_200px.png"
     }
 
 
