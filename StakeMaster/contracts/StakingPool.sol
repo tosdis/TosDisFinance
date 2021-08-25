@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./Whitelist.sol";
 
-contract StakingPool is Ownable, ReentrancyGuard {
+contract StakingPool is Ownable, Whitelist, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -40,14 +41,16 @@ contract StakingPool is Ownable, ReentrancyGuard {
 
     event WithdrawPoolRemainder(address indexed user, uint256 amount);
     event UpdateFinishTime(uint256 addedTokenAmount, uint256 newFinishTime);
+    event HasWhitelistingUpdated(bool newValue);
 
     constructor(
         IERC20 _stakingToken,
         IERC20 _poolToken,
         uint256 _startTime,
         uint256 _finishTime,
-        uint256 _poolTokenAmount
-    ) public {
+        uint256 _poolTokenAmount,
+        bool _hasWhitelisting
+    ) public Whitelist(_hasWhitelisting) {
         stakingToken = _stakingToken;
         rewardToken = _poolToken;
         require(_startTime < _finishTime, "Start must be less than finish");
@@ -120,11 +123,11 @@ contract StakingPool is Ownable, ReentrancyGuard {
         lastRewardTime = now;
     }
 
-    function reinvestTokens() external nonReentrant{
+    function reinvestTokens() external nonReentrant onlyWhitelisted{
         innerStakeTokens(0, true);
     }
 
-    function stakeTokens(uint256 _amountToStake) external nonReentrant{
+    function stakeTokens(uint256 _amountToStake) external nonReentrant onlyWhitelisted{
         innerStakeTokens(_amountToStake, false);
     }
 
@@ -227,5 +230,15 @@ contract StakingPool is Ownable, ReentrancyGuard {
         finishTime = finishTime.add(_addTokenAmount.div(rewardPerSec));
 
         emit UpdateFinishTime(_addTokenAmount, finishTime);
+    }
+
+    function setHasWhitelisting(bool value) external onlyOwner{
+        hasWhitelisting = value;
+        emit HasWhitelistingUpdated(hasWhitelisting);
+    } 
+
+    // ============ Version Control ============
+    function version() external pure returns (uint256) {
+        return 101; // 1.0.1
     }
 }

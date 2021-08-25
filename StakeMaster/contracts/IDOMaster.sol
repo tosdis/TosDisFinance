@@ -4,11 +4,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
-// import "./IDOPool.sol";
 import "./interfaces/IidoMaster.sol";
-// import "./interfaces/IStakingPool.sol";
-// import "./interfaces/IUniswapV2Pair.sol";
-// import "./interfaces/IidoCreator.sol";
 
 contract IDOMaster is IidoMaster, Ownable{
     using SafeMath for uint256;
@@ -23,20 +19,6 @@ contract IDOMaster is IidoMaster, Ownable{
     uint256 public override divider;
 
     uint256 public override feeFundsPercent = 0; /* Default Fee 0% */
-
-    // IStakingPool public disStakingPool;
-    // IStakingPool public lpDisStakingPool;
-    // IUniswapV2Pair public lpUniswapV2Pair;
-    // bool public disReserve0;
-
-    // TierInfo public vipTier;
-    // TierInfo public holdersTier;
-    // TierInfo public publicTier;
-
-    // struct TierInfo {
-    //     uint256 disAmount;     
-    //     uint256 percent; 
-    // }
 
     mapping(address => IDOInfo) public idoInfo;
 
@@ -124,28 +106,6 @@ contract IDOMaster is IidoMaster, Ownable{
         feeFundsPercent = _feeFundsPercent;
     }
 
-    // function setTierPools(IStakingPool _disStakingPool, IStakingPool _lpDisStakingPool, IUniswapV2Pair _lpUniswapV2Pair, bool _disReserve0) external onlyOwner {
-    //     disStakingPool = _disStakingPool;
-    //     lpDisStakingPool = _lpDisStakingPool;
-    //     lpUniswapV2Pair = _lpUniswapV2Pair;
-    //     disReserve0 = _disReserve0;
-
-    //      //check addresses
-    //     getFullDisBalance(msg.sender);
-    // }
-
-    // function setTier(uint256 _vipDisAmount, uint256 _vipPercent, uint256 _holdersDisAmount, uint256 _holdersPercent, uint256 _publicDisAmount, uint256 _publicPercent) external onlyOwner {
-    //     vipTier.disAmount = _vipDisAmount;
-    //     vipTier.percent = _vipPercent;
-
-    //     holdersTier.disAmount = _holdersDisAmount;
-    //     holdersTier.percent = _holdersPercent;
-
-    //     publicTier.disAmount = _publicDisAmount;
-    //     publicTier.percent = _publicPercent;
-    // }
-
-
     function setCreatorProxy(address _creator) external onlyOwner {
         require(isContract(_creator), "Error address");
         creatorProxy = _creator;
@@ -198,50 +158,8 @@ contract IDOMaster is IidoMaster, Ownable{
         return (size > 0);
     }
 
-    //  function getMaxEthPayment(address user, uint256 maxEthPayment)
-    //     public
-    //     view
-    //     override
-    //     returns (uint256)
-    // {
-    //    uint256 _disBalance =  getFullDisBalance(user);
-    //     if(_disBalance>=vipTier.disAmount){
-    //        return maxEthPayment.mul(vipTier.percent).div(100);
-    //     }
-    //     if(_disBalance>=holdersTier.disAmount){
-    //        return maxEthPayment.mul(holdersTier.percent).div(100);
-    //     }
-    //     if(_disBalance>=publicTier.disAmount){
-    //        return maxEthPayment.mul(publicTier.percent).div(100);
-    //     }
-    //     return 0;
-    // }
-
-    // function getFullDisBalance(address user)
-    //     public
-    //     view     
-    //     override   
-    //     returns (uint256)
-    // {
-    //     uint256 _disBalance = feeToken.balanceOf(user);
-    //     if(address(disStakingPool) != address(0)){
-    //         (uint256 _stakedAmount, ) = disStakingPool.getUserInfo(user);
-    //         _disBalance += _stakedAmount;
-    //     }
-    //     if(address(lpDisStakingPool) != address(0)){
-    //             (uint256 _lpBalance, ) = lpDisStakingPool.getUserInfo(user);
-    //             if(_lpBalance > 0) {
-    //                 (uint256 _reserve0, uint256 _reserve1, ) = lpUniswapV2Pair.getReserves();
-    //                 uint256 totalSupply = lpUniswapV2Pair.totalSupply();
-    //                 //_reserve0 is dis
-    //                 if(disReserve0){
-    //                     _disBalance += _lpBalance.mul(_reserve0).div(totalSupply);
-    //                 }
-    //                 else{
-    //                     _disBalance += _lpBalance.mul(_reserve1).div(totalSupply); 
-    //                 }
-    //             }
-    //     }
-    //     return _disBalance;
-    // }
+    // ============ Version Control ============
+    function version() external pure returns (uint256) {
+        return 101; // 1.0.1
+    }
 }

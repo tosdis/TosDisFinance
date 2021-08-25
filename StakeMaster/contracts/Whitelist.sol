@@ -9,8 +9,8 @@ contract Whitelist is Ownable {
     // address[] public whitelistedAddresses;
     bool public hasWhitelisting = false;
 
-    event AddedToWhitelist(address[] indexed accounts);
-    event RemovedFromWhitelist(address indexed account);
+    event AddedToWhitelist(address account);
+    event RemovedFromWhitelist(address account);
 
     modifier onlyWhitelisted() {
         if(hasWhitelisting){
@@ -28,16 +28,17 @@ contract Whitelist is Ownable {
             // require(whitelist[_addresses[i]] != true);
             whitelist[_addresses[i]] = true;
             // whitelistedAddresses.push(_addresses[i]);
+            emit AddedToWhitelist(_addresses[i]);
         }
-        emit AddedToWhitelist(_addresses);
     }
 
-    function remove(address _address) public onlyOwner { //, uint256 _index) public onlyOwner {
-        //require(_address == whitelistedAddresses[_index]);
-        if(whitelist[_address]){
-            whitelist[_address] = false;
-            // delete whitelistedAddresses[_index];
-            emit RemovedFromWhitelist(_address);
+    function remove(address[] memory _addresses) public onlyOwner {
+        for (uint i = 0; i < _addresses.length; i++) {
+            address uAddress = _addresses[i];
+            if(whitelist[uAddress]){
+                whitelist[uAddress] = false;
+                emit RemovedFromWhitelist(uAddress);
+            }
         }
     }
 

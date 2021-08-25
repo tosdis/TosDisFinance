@@ -251,8 +251,6 @@ import "./interfaces/ITierSystem.sol";
         require(vest.balance == 0, "Vesting already created");
 
         vest.balance = amount;
-        //TODO: default is 0
-        // vest.released = uint256(0);
 
         emit VestingCreated(beneficiary, amount);
     }
@@ -292,4 +290,8 @@ import "./interfaces/ITierSystem.sol";
         }
     }
 
+    // ============ Version Control ============
+    function version() external pure returns (uint256) {
+        return 101; // 1.0.1
+    }
 }

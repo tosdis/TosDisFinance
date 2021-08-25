@@ -6,8 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol";
 import "./IDOPool.sol";
 import "./interfaces/IidoMaster.sol";
-// import "./interfaces/IStakingPool.sol";
-// import "./interfaces/IUniswapV2Pair.sol";
 
 contract IDOCreator is Ownable {
     using SafeMath for uint256;
@@ -103,5 +101,10 @@ contract IDOCreator is Ownable {
 
     function setTierSystem(ITierSystem _tierSystem) external onlyOwner {
         tierSystem = _tierSystem;
+    }
+
+    // ============ Version Control ============
+    function version() external pure returns (uint256) {
+        return 101; // 1.0.1
     }
 }

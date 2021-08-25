@@ -71,7 +71,8 @@ contract StakeMaster is Ownable {
         IERC20 _poolToken,
         uint256 _startTime,
         uint256 _finishTime,
-        uint256 _poolTokenAmount
+        uint256 _poolTokenAmount,
+        bool _hasWhitelisting
     ) external {
 
         if(feeAmount > 0) {
@@ -95,7 +96,8 @@ contract StakeMaster is Ownable {
                 _poolToken,
                 _startTime,
                 _finishTime,
-                _poolTokenAmount
+                _poolTokenAmount,
+                _hasWhitelisting
             );
         stakingPool.transferOwnership(msg.sender);
 
@@ -116,5 +118,10 @@ contract StakeMaster is Ownable {
             size := extcodesize(_addr)
         }
         return (size > 0);
+    }
+
+    // ============ Version Control ============
+    function version() external pure returns (uint256) {
+        return 101; // 1.0.1
     }
 }

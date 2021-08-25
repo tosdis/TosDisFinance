@@ -2,68 +2,68 @@ const ERC20Basic = artifacts.require("ERC20Basic");
 const FeeToken = artifacts.require("FeeToken");
 const StakeMaster = artifacts.require("StakeMaster");
 const StakingPool = artifacts.require("StakingPool");
+const IDOMaster = artifacts.require("IDOMaster");
+const IDOCreator = artifacts.require("IDOCreator");
+const IDOPool = artifacts.require("IDOPool");
+const TierSystem = artifacts.require("TierSystem");
+const { toWei, fromWei, toBN } = web3.utils;
 
-const totalSupply = "10000000000000000000000"; // 10000
-const poolTokenSupply = "100000000000000000000"; // 100
-const stakeAmount = "10000000000000000000"; // 10
-const feeAmount = "10000000000000000000"; // 10
-const burnPercent = "1";
-const poolDurationInBlocks = 2000;
+let idoMasterContract;
 
-let feeToken;
-let stakingToken;
-let poolToken;
-let stakeMaster;
-let stakingPool;
+const totalSupply = toWei("10000");
+const poolTokenSupply = toWei("1");
+const stakeAmount = toWei("10");
+const feeAmount = toWei("10");
+//const burnPercent = "0";
+const poolDurationInSecunds = 900;
+
+////ETH PROD
+//const feeWallet = "0xa7cb5b0ca559f8aaa14f09aae1eec3e71d0ab16a";
+//const feeToken = "0x220b71671b649c03714da9c621285943f3cbcdc6";
+//const burnPercent = "45";
+
+
+//BSC PROD
+//const feeWallet = "0xa7cb5b0ca559f8aaa14f09aae1eec3e71d0ab16a";
+//const feeToken = "0x57effde2759b68d86c544e88f7977e3314144859";
+//const burnPercent = "0";
+
+//Fantom PROD
+const feeWallet = "0xa7cb5b0ca559f8aaa14f09aae1eec3e71d0ab16a";
+const feeToken = "0x0e121961DD741C9D49C9A04379da944A9D2FAc7a";
+const burnPercent = "0";
+
+////KOVAN testnet
+//const feeWallet = "0x819243B25cbFD8a852741b1984e39596349370E4";
+//const feeToken = "0x29e417721e6b4ed4b3f0ec982f26f5f153c2e52b";
+
+
+//Test Fantom
+//const feeWallet = "0x15ff3ad8d89DCc8d4186FbF076689b4476111520";
+//const feeToken = "0xdc1c222b5ace804b10b0ac11bea13c113deba826";
+//const burnPercent = "0";
+
 
 module.exports = async (deployer, network, accounts) => {
-    //0x29e417721e6b4ed4b3f0ec982f26f5f153c2e52b
-    await deployer.deploy(FeeToken, totalSupply, "Dis Token", "DIS");
-    feeToken = await FeeToken.deployed();
-    //feeToken = await FeeToken.at("0x29e417721e6b4ed4b3f0ec982f26f5f153c2e52b"); 
-    console.log("Fee Token address ====> " + feeToken.address);
+    
+    ////ERC20Burnable _feeToken,
+    ////    address _feeWallet,
+    ////        uint256 _feeAmount,
+    ////            uint256 _burnPercent
+    //await deployer.deploy(StakeMaster, feeToken, feeWallet, feeAmount, burnPercent);
+    //stakeMaster = await StakeMaster.deployed();
+    //console.log("Stake Master address ====> " + stakeMaster.address);
 
-    //await deployer.deploy(ERC20Basic, totalSupply, {from: accounts[2]});
-    //stakingToken = await ERC20Basic.deployed();
-    //console.log("Staking Token address ====> " + stakingToken.address);
+    //let startTime = Math.floor(Date.now() / 1000) + 600;
+    //let finishTime = startTime + poolDurationInSecunds;
+    //await deployer.deploy(StakingPool, feeToken, feeToken, startTime, finishTime, poolTokenSupply, true);
+    //stakingPool = await StakingPool.deployed();
+    //console.log("StakingPool address ====> " + stakingPool.address);
 
-    //await deployer.deploy(ERC20Basic, totalSupply);
-    //poolToken = await ERC20Basic.deployed();
-    //console.log("Pool(Reward) Token address ====> " + poolToken.address);
-
-    await deployer.deploy(StakeMaster, feeToken.address, accounts[1], feeAmount, burnPercent);
-    stakeMaster = await StakeMaster.deployed();
-    console.log("Stake Master address ====> " + stakeMaster.address);
-
-    //Deploy StakingPool to varify on etherscan
-    await feeToken.approve(stakeMaster.address, totalSupply);
-    //await poolToken.approve(stakeMaster.address, poolTokenSupply);
-
-    let startBlock = (await web3.eth.getBlock('latest')).number + 10000;
-    let finishBlock = startBlock + poolDurationInBlocks;
-
-    await deployer.deploy(StakingPool, feeToken.address, feeToken.address, startBlock, finishBlock, poolTokenSupply);
-    stakingPool = await StakingPool.deployed();
-    console.log("StakingPool address ====> " + stakingPool.address);
-
-    //await feeToken.approve(stakeMaster.address, totalSupply);
-    //await poolToken.approve(stakeMaster.address, poolTokenSupply);
-
-    //let startBlock = (await web3.eth.getBlock('latest')).number;
-    //let finishBlock = startBlock + poolDurationInBlocks;
-
-    //let tx = await stakeMaster.createStakingPool(stakingToken.address, poolToken.address, startBlock, finishBlock, poolTokenSupply);
-
-    //console.log("Staking Pool owner address ===> " + tx.logs[tx.logs.length-1].args.owner);
-    //console.log("Staking Pool address ===> " + tx.logs[tx.logs.length-1].args.pool);
-
-    //stakingPool = await StakingPool.at(tx.logs[tx.logs.length-1].args.pool);
-
-    //await stakingToken.approve(stakingPool.address, totalSupply, {from: accounts[2]});
-    //await stakingPool.stakeTokens(stakeAmount, {from: accounts[2]});
-
-    //console.log("Wallet " + accounts[2] + " staked " + web3.utils.fromWei(stakeAmount) + " tokens in Staking Pool with address ===> " + stakingPool.address);
-
-    //let reward = await stakingPool.pendingReward(accounts[2]);
-    //console.log("Reward of the wallet " + accounts[2] + " in Staking Pool with address ===> " + stakingPool.address + " = " + reward.toNumber());
+    //console.log("approving for stakingPool");
+    //await feeTokenContract.approve(stakingPool.address, totalSupply);
+    //console.log("trying extendDuration");
+    //await stakingPool.extendDuration(poolTokenSupply);
+    //console.log("extendDuration");
+    
 };
