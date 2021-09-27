@@ -89,8 +89,11 @@
     "0x7a662c117512abf3e4c722c2933345fdb6a77677",
     "0xce7397060ab74596e9f9c373e9e8d4aa6c41dc01",
     "0x782ee877f7754dacd1a4e0326d037bb00892c5cb",
-    "0x8b594e589747b87d3bbc00431722f70c966a67c1"
-
+    "0x8b594e589747b87d3bbc00431722f70c966a67c1",
+    "0x02a9c7ff29bd32f076f8427a9fd7e814f4f07fcf",
+    "0xee0aaab01a60703ee742298a0769c9d7a13a52c9",
+    "0x59b0a1f714a046343c25f6212f30aba6cb96f8b3",
+    "0xcb5673325d7832331f8c09c6f226eebc4c4a3d72"
     
   ],
   "poolTokenImages": [
@@ -193,6 +196,14 @@
     {
       "address": "0x8e4a2fa6e651df75f7f4e9e9ac81f8f9347a4add",
       "image_url": "https://raw.githubusercontent.com/smallinvestor/logo-hosting/main/tcuz-logo.png"
+    },
+    {
+      "address": "0xd4a06f9d51a992a3a1f07bd5cdff1c465b23a723",
+      "image_url": "https://raw.githubusercontent.com/smallinvestor/logo-hosting/main/arata5.png"
+    },
+    {
+      "address": "0xfbfae0dd49882e503982f8eb4b8b1e464eca0b91",
+      "image_url": "https://raw.githubusercontent.com/smallinvestor/logo-hosting/main/TCS.png"
     }
 
 
