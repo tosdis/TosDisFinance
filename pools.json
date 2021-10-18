@@ -111,8 +111,8 @@
     "0x0F80050bfbF9C2A06e0Ca3B21FeaF8c1F76A1708",
     "0xbc80cbce3560ca1c88baf802e29be71552cb3038",
     "0xaBDE33082cd8a4d405E08bE6Ebf01B939cA4CEb9",
-    "0x236bf6a65524d8170d523fc5399982b97b68d109"
-    
+    "0x236bf6a65524d8170d523fc5399982b97b68d109",
+    "0x42690A91592995198b45CBE7231579b23cc16E8f"
   ],
   "poolTokenImages": [
     {
@@ -226,6 +226,10 @@
     {
       "address": "0xf5555732b3925356964695578fefcffcd31bcbb8",
       "image_url": "https://raw.githubusercontent.com/smallinvestor/logo-hosting/main/p.png"
+    },
+    {
+      "address": "0xd2f38621c3c65300ecaba7020c05d1350f9c265c",
+      "image_url": "https://farms.bishares.finance/images/tokens/BISON.png"
     }
 
 
