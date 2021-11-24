@@ -121,7 +121,8 @@
     "0xe52a8f47c2610f93ae4140eca60ac45c6a1cd558",
     "0x38ad60b96b181bccc06985e9ea6d646862a61950",
     "0x487f25373a45a2767ef134328bb9b3eff20ede00",
-    "0xaca150957a0160050ad1740a40c08d2116f6c014"
+    "0xaca150957a0160050ad1740a40c08d2116f6c014",
+    "0x77266f3f41da49f2b940cf8134c5852ff90935a7"
     
   ],
   "poolTokenImages": [
@@ -240,6 +241,10 @@
     {
       "address": "0xd2f38621c3c65300ecaba7020c05d1350f9c265c",
       "image_url": "https://farms.bishares.finance/images/tokens/BISON.png"
+    },
+    {
+      "address": "0x77266f3f41da49f2b940cf8134c5852ff90935a7",
+      "image_url": "https://fischdemo.s3.ap-southeast-1.amazonaws.com/infoLogo256.png"
     }
 
 
