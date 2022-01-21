@@ -126,7 +126,11 @@
     "0x38e354B867b18e60cB2a7520F2B066dac610B855",
     "0xE9D18328AcCa702c278ddDa825C9a75Ec4263743",
     "0x093F138b0fa9FAC7bF722f150806d854400FD81c",
-    "0x667010403D5a8db364c05A3374e0b7d65490f089"
+    "0x667010403D5a8db364c05A3374e0b7d65490f089",
+    "0xf0930e0732fc992d433aa097056500c9d5e7387f",
+    "0xaa768d61934dc0e71457ee66a58122ca54916aca",
+    "0x85bf87cb545aa63b0c2783381eceea71607999af",
+    "0x749d54d405ca1dbefc20939e2da2baec2a704a24"
     
   ],
   "poolTokenImages": [
@@ -176,19 +180,19 @@
     },
     {
       "address": "0xc3472937c79c3a93f54c7155b9fc7e94693156e9",
-      "image_url": "https://investdex.io/dist/src/assets/images/logo.png"
+      "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/10468.png"
     },
     {
       "address": "0x451d682b0be52912b3fbbc6956c3205c0f238084",
-      "image_url": "https://investdex.io/dist/src/assets/images/logo.png"
+      "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/10468.png"
     },
     {
       "address": "0xf0b9893a7be02c9ff89a483054e97a5a578a7206",
-      "image_url": "https://investdex.io/dist/src/assets/images/logo.png"
+      "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/10468.png"
     },
     {
       "address": "0x853a8ab1c365ea54719eb13a54d6b22f1fbe7feb",
-      "image_url": "https://investdex.io/dist/src/assets/images/logo.png"
+      "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/10468.png"
     },
     {
       "address": "0xc14df1e2fff3708816495e7364ff274aceecad91",
