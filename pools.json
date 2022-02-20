@@ -249,8 +249,10 @@
     {
       "address": "0xd2f38621c3c65300ecaba7020c05d1350f9c265c",
       "image_url": "https://farms.bishares.finance/images/tokens/BISON.png"
+    },
+    {
+      "address": "0x267DF8C1168C9d5aE8Ee97B48c7e86d8d43D88d2",
+      "image_url": "https://app.tosdis.finance/assets/images/metarun-logo.png"
     }
-
-
   ]
 }
