@@ -255,6 +255,10 @@
     {
       "address": "0x267DF8C1168C9d5aE8Ee97B48c7e86d8d43D88d2",
       "image_url": "https://app.tosdis.finance/assets/images/metarun-logo.png"
+    },
+    {
+      "address": "0xE5e2118415aC39f3589eB74b9c9F452932982C5E",
+      "image_url": "https://s2.coinmarketcap.com/static/img/coins/64x64/18268.png"
     }
   ]
 }
