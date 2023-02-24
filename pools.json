@@ -132,21 +132,22 @@
     "0x85bf87cb545aa63b0c2783381eceea71607999af",
     "0x749d54d405ca1dbefc20939e2da2baec2a704a24",
     "0x68a8cE1701bee3eAbcD666BBCB1EC648e73D249b",
-    "0x56aB9f71c76436e29df4872b9A2118841B8cbCd0"
+    "0x56aB9f71c76436e29df4872b9A2118841B8cbCd0",
+    "0x4691CC1521d959263179046495066A1471571d19"
     
   ],
   "poolTokenImages": [
     {
       "address": "0x220B71671b649c03714dA9c621285943f3cbcDC6",
-      "image_url": "https://tosdis.finance/images/tosdislogo.svg"
+      "image_url": "https://tosdis.finance/images/logo.png"
     },
     {
       "address": "0x57effde2759b68d86c544e88f7977e3314144859",
-      "image_url": "https://tosdis.finance/images/tosdislogo.svg"
+      "image_url": "https://tosdis.finance/images/logo.png"
     },
     {
       "address": "0x0e121961dd741c9d49c9a04379da944a9d2fac7a",
-      "image_url": "https://tosdis.finance/images/tosdislogo.svg"
+      "image_url": "https://tosdis.finance/images/logo.png"
     },
     {
       "address": "0xd794DD1CAda4cf79C9EebaAb8327a1B0507ef7d4",
